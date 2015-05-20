@@ -39,15 +39,24 @@ public class Elgamal {
              return p;
             }
     }
-    //Ordre du nombre a dans Z/nZ
-    public static BigInteger ordre(BigInteger a, BigInteger n)
+    /**
+     *Ordre des nombres dans Z/nZ
+     */
+    private static BigInteger bi;
+    public static BigInteger ordre(BigInteger n)
     {
-        for (BigInteger i = BigInteger.ONE; i.compareTo(n) < 0; i.add(BigInteger.ONE))
+        for (BigInteger a = BigInteger.ONE; a.compareTo(n) < 0; a = a.add(BigInteger.ONE))
         {
-            if(a.modPow(i, n).equals(BigInteger.ONE))
-                return i;
-        }
-        return BigInteger.ZERO;
+            for (BigInteger b = BigInteger.ONE; b.compareTo(n.subtract(BigInteger.ONE)) <= 0; b = b.add(BigInteger.ONE))
+            {
+                //System.out.println("a = " + a + "; b = " + b + "; n = " + n);
+                BigInteger z = a.modPow(b, n);
+                if(z.equals(BigInteger.ONE))
+                    System.out.println("l'ordre de " + a +" dans " + n + " est " + b);
+                bi = b;
+            }//Fin boucle 2
+        } //Fin boucle 1
+        return bi;
     }
     
     /**
@@ -95,6 +104,13 @@ public class Elgamal {
         sortie.println("g^2p' = " + g2pp);
         sortie.close();//pour terminer l'écriture
         
+        //utilisation ordre Z/23Z
+        System.out.println("On commence ordre");
+        BigInteger x = new BigInteger("23");
+        BigInteger c = new BigInteger("21");
+        BigInteger z = ordre(c);
+        BigInteger q = ordre(x);
+        BigInteger r = ordre(g);//Citer les ordres des éléments de g est trop long avec cet algorithme
     }
     
 }
